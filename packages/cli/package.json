@@ -1,0 +1,28 @@
+{
+  "name": "@instant-lock/cli",
+  "version": "1.0.0",
+  "bin": {
+    "instant-lock": "dist/index.js"
+  },
+  "scripts": {
+    "build:sw": "esbuild src/sw/index.ts --bundle --outfile=dist/assets/sw.js --minify --platform=browser --external:crypto",
+    "copy:assets": "mkdir -p dist/assets && cp assets/index.html dist/assets/",
+    "build": "npm run copy:assets && tsc -b && npm run build:sw",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@instant-lock/cryptor": "^1.0.0",
+    "commander": "^10.0.0",
+    "glob": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^18.0.0",
+    "esbuild": "^0.27.2",
+    "http-server": "^14.1.1",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.0.0"
+  }
+}

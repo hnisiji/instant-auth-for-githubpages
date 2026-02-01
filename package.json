@@ -1,0 +1,21 @@
+{
+  "name": "instant-lock",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/cryptor",
+    "packages/cli",
+    "packages/action"
+  ],
+  "scripts": {
+    "build": "npm run build -w @instant-lock/cryptor && npm run build -w @instant-lock/cli && npm run build -w @instant-lock/action",
+    "test": "npm run test --workspaces"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "glob": "^10.0.0"
+  }
+}

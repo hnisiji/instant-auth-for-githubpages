@@ -1,0 +1,25 @@
+name: 'Instant Lock for GitHub Pages'
+description: 'Encrypts your static site for GitHub Pages with password protection (Instant Lock)'
+author: 'hnisiji'
+branding:
+  icon: 'lock'
+  color: 'blue'
+inputs:
+  input-dir:
+    description: 'Directory containing the static site to encrypt'
+    required: true
+    default: '.'
+  output-dir:
+    description: 'Directory where the encrypted site will be output'
+    required: true
+    default: 'dist'
+  password:
+    description: 'Password to protect the site'
+    required: true
+  title:
+    description: 'Title for the login page'
+    required: false
+    default: 'Restricted Area'
+runs:
+  using: 'node20'
+  main: 'packages/action/dist/index.js'

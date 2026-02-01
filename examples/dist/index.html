@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Secret Site</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        input { padding: 10px; margin: 10px 0; width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+        button:hover { background: #0056b3; }
+        .error { color: red; font-size: 0.9em; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>My Secret Site</h2>
+        <p>Please enter the password.</p>
+        <input type="password" id="password" placeholder="Password" autofocus>
+        <button id="loginBtn">Login</button>
+        <div id="errorMsg" class="error">Failed to register Service Worker.</div>
+    </div>
+    <script>
+        const loginBtn = document.getElementById('loginBtn');
+        const passwordInput = document.getElementById('password');
+        const errorMsg = document.getElementById('errorMsg');
+
+        async function login() {
+            const password = passwordInput.value;
+            if (!password) return;
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Verifying...';
+
+            if ('serviceWorker' in navigator) {
+                try {
+                    // Register Service Worker
+                    const reg = await navigator.serviceWorker.register('./sw.js');
+                    await navigator.serviceWorker.ready;
+                    
+                    // Send password to SW
+                    if (navigator.serviceWorker.controller) {
+                        navigator.serviceWorker.controller.postMessage({ type: 'SET_PASSWORD', password });
+                    } else {
+                        // If controller is null (first load), we need to wait for it or reload
+                        // But simply reloading might not be enough if the SW hasn't claimed clients yet.
+                        // We'll listen for the confirmation message from SW (if we implemented it)
+                        // or just reload after a short delay, hoping SW has activated.
+                        
+                        // A more robust way:
+                        navigator.serviceWorker.addEventListener('controllerchange', () => {
+                             navigator.serviceWorker.controller.postMessage({ type: 'SET_PASSWORD', password });
+                        });
+                    }
+
+                    // Wait a bit for the message to be processed and SW to be ready
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
+                    
+                } catch (e) {
+                    console.error('SW registration failed', e);
+                    errorMsg.style.display = 'block';
+                    errorMsg.textContent = 'Error: ' + e.message;
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Login';
+                }
+            } else {
+                alert('Service Worker is not supported in this browser.');
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        }
+
+        loginBtn.addEventListener('click', login);
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+</html>

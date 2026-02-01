@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM"],
+    "module": "CommonJS",
+    "declaration": true,
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"]
+}
