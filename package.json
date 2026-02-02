@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "packages/cryptor",
     "packages/cli",
     "packages/action"
   ],
   "scripts": {
-    "build": "npm run build -w @instant-lock/cryptor && npm run build -w @instant-lock/cli && npm run build -w @instant-lock/action",
+    "build": "npm run build -w @instant-lock/cli && npm run build -w @instant-lock/action",
     "test": "npm run test --workspaces"
   },
   "devDependencies": {

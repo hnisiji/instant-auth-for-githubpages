@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import { decrypt } from '@instant-lock/cryptor';
+import { decrypt } from '../cryptor';
 
 declare const self: ServiceWorkerGlobalScope;
 

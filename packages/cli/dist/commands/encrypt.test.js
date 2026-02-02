@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const encrypt_1 = require("./encrypt");
-const cryptor_1 = require("@instant-lock/cryptor");
+const cryptor_1 = require("../cryptor");
 const TEST_DIR = path.join(__dirname, 'temp_test_dir');
 const INPUT_DIR = path.join(TEST_DIR, 'input');
 const OUTPUT_DIR = path.join(TEST_DIR, 'output');
