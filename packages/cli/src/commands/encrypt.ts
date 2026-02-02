@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { glob } from 'glob';
-import { encrypt } from '@instant-lock/cryptor';
+import { encrypt } from '../cryptor';
 import { generateBootstrapFiles } from '../lib/bootstrap';
 
 export interface EncryptOptions {

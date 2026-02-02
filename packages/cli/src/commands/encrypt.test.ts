@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { encryptCommand } from './encrypt';
-import { decrypt } from '@instant-lock/cryptor';
+import { decrypt } from '../cryptor';
 
 const TEST_DIR = path.join(__dirname, 'temp_test_dir');
 const INPUT_DIR = path.join(TEST_DIR, 'input');

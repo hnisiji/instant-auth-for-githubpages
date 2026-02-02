@@ -1,7 +1,7 @@
 "use strict";
 /// <reference lib="webworker" />
 Object.defineProperty(exports, "__esModule", { value: true });
-const cryptor_1 = require("@instant-lock/cryptor");
+const cryptor_1 = require("../cryptor");
 let password = null;
 // MIME Types mapping
 const MIME_TYPES = {

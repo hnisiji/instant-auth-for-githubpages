@@ -37,7 +37,7 @@ exports.encryptCommand = encryptCommand;
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const glob_1 = require("glob");
-const cryptor_1 = require("@instant-lock/cryptor");
+const cryptor_1 = require("../cryptor");
 const bootstrap_1 = require("../lib/bootstrap");
 async function encryptCommand(options) {
     const inputDir = path.resolve(options.inputDir);

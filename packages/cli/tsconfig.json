@@ -11,8 +11,5 @@
     "declaration": true,
     "composite": true
   },
-  "references": [
-    { "path": "../cryptor" }
-  ],
   "include": ["src/**/*"]
 }
