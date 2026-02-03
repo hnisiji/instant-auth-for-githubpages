@@ -1,12 +1,12 @@
-# Instant-Lock-For-Github-Pages
+# Instant Lock
 
 > [!WARNING]
 > このプロジェクトは実験的なものであり、実運用を想定したものではありません。
 
-Service Worker を使い、アクセス時にパスワードが必要な Github Pages を作成する Github Actions のアクションです。
+Service Worker を使い、アクセス時にパスワードが必要な GitHub Pages を作成するライブラリです。
 
-このアクションでは、すべてのリソースを AES による暗号化を施すことで Github のリポジトリ上から中身を簡単には見えないようにします。   
-また、AES の復号化をブラウザ上で行うことで、一度パスワードを入れると認証がなされたかのような見え方を実現します。  
+このライブラリでは、すべてのリソースを AES による暗号化を施すことでコンテンツの中身を簡単には見えないようにします。   
+また、AES の復号化をブラウザ上で行うことで、一度パスワードを入れると認証がなされたかのような見え方を実現します。
 
 ### 制限事項
 - 認証ではなく、あくまで簡易的な **難読化** です。暗号化 ZIP ファイルを公開するぐらいの気休めにしかなりません。
@@ -125,15 +125,29 @@ sequenceDiagram
    - ソースコード (`packages/`) を修正します。
    - `examples` ディレクトリで `docker-compose up --build` を再実行して変更を反映させます。
 
-## 設定方法のイメージ
+## 使い方
 
-### 1. Public Repository (公開用)
-Github Pages を有効にするリポジトリです。ここには暗号化されたファイルのみが配置されます。
+```bash
+npx @instant-lock/cli encrypt -i ./docs -o ./encrypted -p mysecretpassword -t "My Private Docs"
+```
 
-### 2. Private Repository (ソースコード用)
-実際のウェブサイトのソースコードを持つリポジトリです。ここでビルドと暗号化を行い、Public リポジトリへデプロイします。
+これにより、`./docs` 内のすべてのファイルが暗号化され、パスワード入力ページとともに `./encrypted` に出力されます。
 
-`.github/workflows/build-and-deploy.yml`:
+## CI/CD パイプラインへの統合
+
+CI/CD パイプライン（GitHub Actions など）を利用して、ソースコードのビルドから暗号化、デプロイまでを自動化できます。
+
+以下は、GitHub Actions を使用して、Private リポジトリでビルド・暗号化を行い、Public リポジトリ（GitHub Pages）へデプロイする構成例です。
+
+### 構成例
+
+1. **Public Repository (公開用)**
+   GitHub Pages を有効にするリポジトリです。ここには暗号化されたファイルのみが配置されます。
+
+2. **Private Repository (ソースコード用)**
+   実際のウェブサイトのソースコードを持つリポジトリです。ここでビルドと暗号化を行い、Public リポジトリへデプロイします。
+
+### ワークフロー例 (.github/workflows/build-and-deploy.yml)
 
 ```yaml
 name: Build, Encrypt and Deploy
@@ -157,7 +171,7 @@ jobs:
 
       # 2. 暗号化とデプロイ用ファイルの生成
       - name: Encrypt and Prepare
-        uses: hnisiji/instant-lock-for-githubpages@v1
+        uses: hnisiji/instant-lock@v1
         with:
           input_dir: './'
           output_dir: './__encrypted_dist'
@@ -185,16 +199,15 @@ jobs:
 ```
 .
 ├── packages/
-│   ├── cryptor/          # 暗号化・復号化ロジック (Shared Library)
-│   │   # Web Crypto API をラップし、Node.js/Browser 両対応
-│   │
 │   ├── cli/              # ビルド・暗号化ツール (Node.js)
+│   │   ├── src/cryptor/  # 暗号化・復号化ロジック
+│   │   │   # Web Crypto API をラップし、Node.js/Browser 両対応
 │   │   # input_dir を走査し、暗号化して output_dir に配置
 │   │   # ブートストラップ用 index.html と sw.js を生成
 │   │
-│   └── action/           # Github Action 定義
+│   └── action/           # GitHub Action 定義
 │       # action.yml の実体と実行スクリプト
 │
-├── action.yml            # Github Action 定義 (packages/action への参照)
-└── README.md
+├── action.yml            # GitHub Action 定義 (packages/action への参照)
+└── README.md             # このファイル
 ```

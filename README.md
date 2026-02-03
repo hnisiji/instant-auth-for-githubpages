@@ -1,11 +1,11 @@
-# Instant-Lock-For-Github-Pages
+# Instant Lock
 
 > [!WARNING]
 > This project is experimental and is not intended for production use.
 
-This is a Github Actions action that uses Service Worker to create Github Pages that require a password upon access.
+This is a library that uses Service Worker to create GitHub Pages that require a password upon access.
 
-This action encrypts all resources using AES, making it difficult to easily view the contents from the Github repository.
+This library encrypts all resources using AES, making it difficult to easily view the contents from the GitHub repository.
 Additionally, by performing AES decryption in the browser, it achieves an appearance as if authentication was performed once the password is entered.
 
 ### Limitations
@@ -125,15 +125,29 @@ Procedures for local development and verification. Uses Docker and Docker Compos
    - Modify source code (`packages/`).
    - Re-run `docker-compose up --build` in the `examples` directory to reflect changes.
 
-## Configuration
+## Usage
 
-### 1. Public Repository (For Publication)
-The repository where GitHub Pages will be enabled. Only encrypted files will be placed here.
+```bash
+npx @instant-lock/cli encrypt -i ./docs -o ./encrypted -p mysecretpassword -t "My Private Docs"
+```
 
-### 2. Private Repository (For Source Code)
-The repository containing the actual website source code. Build and encrypt here, then deploy to the Public repository.
+This will encrypt all files in `./docs` and output them along with the password input page to `./encrypted`.
 
-`.github/workflows/build-and-deploy.yml`:
+## Integration into CI/CD Pipeline
+
+You can automate the process from building source code to encryption and deployment using CI/CD pipelines (such as GitHub Actions).
+
+Below is an example configuration using GitHub Actions to build and encrypt in a Private repository and deploy to a Public repository (GitHub Pages).
+
+### Configuration Example
+
+1. **Public Repository (For Publication)**
+   The repository where GitHub Pages will be enabled. Only encrypted files will be placed here.
+
+2. **Private Repository (For Source Code)**
+   The repository containing the actual website source code. Build and encrypt here, then deploy to the Public repository.
+
+### Workflow Example (.github/workflows/build-and-deploy.yml)
 
 ```yaml
 name: Build, Encrypt and Deploy
@@ -157,7 +171,7 @@ jobs:
 
       # 2. Encrypt and Prepare
       - name: Encrypt and Prepare
-        uses: hnisiji/instant-lock-for-githubpages@v1
+        uses: hnisiji/instant-lock@v1
         with:
           input_dir: './'
           output_dir: './__encrypted_dist'
@@ -185,16 +199,15 @@ This project is a Monorepo structure.
 ```
 .
 ├── packages/
-│   ├── cryptor/          # Encryption/Decryption Logic (Shared Library)
-│   │   # Wraps Web Crypto API, supports both Node.js and Browser environments
-│   │
 │   ├── cli/              # Build/Encryption Tool (Node.js)
+│   │   ├── src/cryptor/  # Encryption/Decryption Logic
+│   │   │   # Wraps Web Crypto API, supports both Node.js and Browser environments
 │   │   # Scans input_dir, encrypts files, and places them in output_dir
 │   │   # Generates index.html and sw.js for bootstrapping
 │   │
-│   └── action/           # Github Action Definition
+│   └── action/           # GitHub Action Definition
 │       # Implementation of action.yml and execution scripts
 │
-├── action.yml            # Github Action Definition (Reference to packages/action)
-└── README.md
+├── action.yml            # GitHub Action Definition (Reference to packages/action)
+└── README.md             # This file
 ```

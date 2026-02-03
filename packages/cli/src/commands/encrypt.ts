@@ -17,12 +17,16 @@ export async function encryptCommand(options: EncryptOptions) {
     const password = options.password;
     const title = options.title;
 
-    console.log(`Encrypting from ${inputDir} to ${outputDir}`);
+    if (!fs.existsSync(inputDir)) {
+        throw new Error(`Input directory does not exist: ${inputDir}`);
+    }
 
     // Clean/Create output directory
     if (fs.existsSync(outputDir)) {
-        fs.rmSync(outputDir, { recursive: true, force: true });
+        throw new Error(`Output directory already exists: ${outputDir}`);
     }
+
+    console.log(`Encrypting from ${inputDir} to ${outputDir}`);
     fs.mkdirSync(outputDir, { recursive: true });
 
     // Find all files

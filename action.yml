@@ -1,5 +1,5 @@
-name: 'Instant Lock for GitHub Pages'
-description: 'Encrypts your static site for GitHub Pages with password protection (Instant Lock)'
+name: 'Instant Lock'
+description: 'Encrypts your static site for password protection'
 author: 'hnisiji'
 branding:
   icon: 'lock'

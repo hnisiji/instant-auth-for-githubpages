@@ -1,14 +1,42 @@
 {
   "name": "@instant-lock/cli",
   "version": "1.0.0",
+  "description": "CLI tool to encrypt static site resources for Instant Lock",
+  "keywords": [
+    "cli",
+    "encryption",
+    "static-site",
+    "password-protection"
+  ],
+  "author": "hnisiji",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hnisiji/instant-lock.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/hnisiji/instant-lock/issues"
+  },
+  "homepage": "https://github.com/hnisiji/instant-lock#readme",
   "bin": {
     "instant-lock": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build:sw": "esbuild src/sw/index.ts --bundle --outfile=dist/assets/sw.js --minify --platform=browser --external:crypto",
     "copy:assets": "mkdir -p dist/assets && cp assets/index.html dist/assets/",
     "build": "npm run copy:assets && tsc -b && npm run build:sw",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "commander": "^10.0.0",

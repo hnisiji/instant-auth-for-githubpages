@@ -15,6 +15,11 @@ program.command('encrypt')
     .requiredOption('-p, --password <password>', 'Password for encryption')
     .option('-t, --title <title>', 'Title for the login page', 'Restricted Area')
     .action(async (options) => {
-    await (0, encrypt_1.encryptCommand)(options);
+    try {
+        await (0, encrypt_1.encryptCommand)(options);
+    }
+    catch (e) {
+        console.error(`Error: ${e.message}`);
+    }
 });
 program.parse(process.argv);
